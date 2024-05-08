@@ -1,0 +1,22 @@
+body{
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+    background-color: #6a6a6a
+}
+h1{
+    color: #3A758C;
+    text-align: center;
+}
+.profile-pic{
+    width: 200px;
+    height: auto;
+    border-radius: 50%;
+    border: 4px solid #000;
+    object-fit: cover;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+body{
+    text-align: center;
+}
