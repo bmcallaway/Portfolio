@@ -17,8 +17,6 @@ public class WebServer{
         } catch (Exception e){
             e.printStackTrace();
         }
-
-
     }
 }
 

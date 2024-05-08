@@ -34,27 +34,46 @@ import java.net.*;
             InputStream in = socket.getInputStream();
             OutputStream out = socket.getOutputStream();
         ) {
-
+            // Read the request (optional)
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             String line;
-            while ((line = reader.readLine()) != null && !line.isEmpty()) {
-                System.out.println(line);
+            line = reader.readLine();
+            System.out.println("Line: " + line + " read from client");
+            if(line.startsWith("GET")){
+                int firstSpace = line.indexOf(" ");
+                int secondSpace = line.indexOf(" ", firstSpace + 1);
+                String request = line.substring(firstSpace + 2, secondSpace);
+                if(request.equals("")){
+                    System.out.print("No request; Homepage ");
+                    File index = new File("Portfolio.html");
+                    byte[] idxBits = readFileInBytes(index);
+                    String httpResponse = "HTTP/1.1 200 OK\n"
+                        + "Content-Type: text/html\n"
+                        + "\n";
+                    out.write(httpResponse.getBytes());
+                    out.write(idxBits);
+                }else if(request.equals("styles.css")){
+                    System.out.println("Style sheet request");
+                    File style = new File("styles.css");
+                    byte[] styleBits = readFileInBytes(style);
+                    String cssResponse = "HTTP/1.1 200 OK\n"
+                        + "Content-Type: text/css\n"
+                        + "\n";
+                    out.write(cssResponse.getBytes());
+                    out.write(styleBits);
+                }else if(request.equals("profile.jpeg")){
+                    System.out.println("Profile picture request");
+                    File profile = new File("profile.jpeg");
+                    byte[] profileBits = readFileInBytes(profile);
+                    String profileResponse = "HTTP/1.1 200 OK\n"
+                        + "Content-Type: text/jpeg\n"
+                        + "\n";
+                    out.write(profileResponse.getBytes());
+                    out.write(profileBits);
+                }
             }
-
             // Send HTTP response
-            File file = new File("Portfolio.html");
-            if (file.exists()) {
-                byte[] content = readFileInBytes(file);
-                String httpResponse = "HTTP/1.1 200 OK\r\n" +
-                        "Content-Type: text/html\r\n" +
-                        "Content-Length: " + content.length + "\r\n" +
-                        "\r\n";
-                out.write(httpResponse.getBytes());
-                out.write(content);
-            } else {
-                String errorResponse = "HTTP/1.1 404 Not Found\r\n\r\n";
-                out.write(errorResponse.getBytes());
-            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
